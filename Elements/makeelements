@@ -1,0 +1,1 @@
+g++ -o elements elements.cpp -L../lib/ -lPiscisRT  -L./extlibs/ -ljpeg -lglut -lGL -lGLU -lexpat 

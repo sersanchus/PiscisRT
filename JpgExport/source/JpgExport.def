@@ -1,0 +1,10 @@
+LIBRARY jpgimport
+DESCRIPTION 'Jpg importer PiscisRT plugin'
+EXPORTS
+	Identification	@1
+	Type	@2
+	Extension @3
+	Description @4
+	Export @5
+SECTIONS
+ .data READ WRITE

@@ -1,0 +1,1 @@
+swig\swig.exe -c++ -python PiscisRTut.i && cl -c ..\PiscisRTut\source\PRTutMain.cpp PiscisRTut_wrap.cxx /Iextincs/Python && cl /LD PRTutMain.obj PiscisRTut_wrap.obj extlibs\python23.lib ..\PiscisRT\lib\PiscisRT.lib extlibs\xmlparse.lib && move PRTutMain.dll _PiscisRTut.dll

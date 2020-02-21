@@ -1,0 +1,2 @@
+g++ -o elements elements.cpp -L/usr/lib -lGL -lGLU -lglut -lX11 -lXmu -L../lib -L./extlibs -lPiscisRT -ljpeg -lexpataix -lpthread
+

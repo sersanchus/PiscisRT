@@ -1,0 +1,13 @@
+/*/lib/
+*.plg
+*~
+/Editor/plugins
+/Editor/swig
+*.ncb
+/Elements/out
+*.dsw
+*.opt
+warnings.txt
+/PiscisRT/doc/html
+Backup.*
+*.exe

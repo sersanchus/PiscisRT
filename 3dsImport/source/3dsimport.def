@@ -1,0 +1,10 @@
+LIBRARY 3dsimport
+DESCRIPTION '3ds importer PiscisRT plugin'
+EXPORTS
+	Identification	@1
+	Type	@2
+	Extension @3
+	Description @4
+	Import @5
+SECTIONS
+ .data READ WRITE

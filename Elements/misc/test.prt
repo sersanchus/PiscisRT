@@ -1,0 +1,756 @@
+<piscisrt>
+
+
+
+
+
+
+	<scene
+		name="dof" 
+		
+		width="320" 
+		height="240"
+		subwidth2="90*2,210*2"
+		subheight2="90*2,170*2"
+
+		camerapos="0,3,4.5"
+		cameraend="0,0.45,0"
+		camerapos2="0,2.5,9"
+		cameraend2="0,2.5,0"
+		camerafov="30"
+		deep="2"
+
+		BDoubleSided="false"
+				
+		BOctrees="true"
+		octreesdeep="1"
+		octreesnumonleaf="50"
+
+		BShadows="true"
+		BTransformations="true"
+		BTextures="true"
+		shadowpass="1"
+		rendersamples="1"
+		antialiasing="PRT_ANTIALIASING_NONE"
+
+		dof="true"
+		dofpoint="0,0.45,0"
+		dofaperture="0.1"
+		
+		photonmap="false"
+		numphotones="1000"
+		groupphotones="20"
+		scalephoton="0.000001"
+		>
+
+		<variables
+			a="0.4"
+			b="5"
+			c="5">
+		</variables>
+		
+		<texture
+			name="tex1"
+			type="PRT_TEXTURE_PERLIN_CLOUD"
+			color1="0.5,0.6,0.8"
+			color2="0,0,0"
+			scale="50"
+			alpha="2"
+			beta="5"
+			n="5">
+		</texture>
+
+		<texture
+			name="tex2"
+			type="PRT_TEXTURE_BITMAP"
+			path="D:\PiscisRT\Elements\misc\test.png">
+		</texture>
+		
+		<material 
+			name="mat"
+			color="0.0,0.0,0.0"
+			texture2="tex1"
+			bumpmap2="tex1"
+			bumpfactor="0.3"
+			refraction2="0.6"
+			gireflection="0.2"
+			reflection="0.6">
+		</material>
+
+		<material 
+			name="matluz"
+			color="1,1,1"
+			forced="true">
+		</material>
+
+		<material 
+			name="matsuelo"
+			color="0.0,1.0,0.0"
+			ambientcolor="0.07,0.07,0.07"
+			texture2="tex2"
+			bumpmap2="tex1"
+			bumpfactor="0.3"
+			gireflection="0.2"
+			reflection2="0.6"
+			BRDFtype="BRDF_PHONG">
+		</material>
+
+		<rectangle
+			p1="b,0,b"
+			p2="b,0,-b"
+			p3="-b,0,-b"
+			p4="-b,0,b"
+			n1="0,1,0"
+			n2="0,1,0"
+			n3="0,1,0"
+			n4="0,1,0"
+			t1="1,0"
+			t2="1,1"
+			t3="0,1"
+			t4="0,0"
+			material="matsuelo">
+		</rectangle>
+
+		<translate vector="0.0,0.45,0.0">
+			<rotate axis="1,0,0" angle="90">
+				<cylinder
+					center2="-0.65,0.5,0.3"
+					center="0,0,0"
+					radius="0.15"
+					lenght="0.9"
+					repu="1"
+					repv="1"
+					material="mat">
+				</cylinder>
+			</rotate>
+		</translate>
+
+		<translate vector="-0.6,0.45,0.6">
+			<rotate axis="1,0,0" angle="90">
+				<cylinder
+					center2="-0.65,0.5,0.3"
+					center="0,0,0"
+					radius="0.15"
+					lenght="0.9"
+					repu="1"
+					repv="1"
+					material="mat">
+				</cylinder>
+			</rotate>
+		</translate>
+
+		<translate vector="0.6,0.45,-0.6">
+			<rotate axis="1,0,0" angle="90">
+				<cylinder
+					center2="-0.65,0.5,0.3"
+					center="0,0,0"
+					radius="0.15"
+					lenght="0.9"
+					repu="1"
+					repv="1"
+					material="mat">
+				</cylinder>
+			</rotate>
+		</translate>
+		
+		<trianglelight
+			p1="-a,c,6*a"
+			p2="-a,c,-6*a"
+			p3="a,c,-6*a"
+			n1="-0.57,-0.57,0.57"
+			n2="-0.57,-0.57,-0.57"
+			n3="0.57,-0.57,-0.57"
+			color="1,1,1"
+			intensity="8000">
+		</trianglelight>
+
+		<trianglelight
+			p1="a,c,-6*a"
+			p2="a,c,6*a"
+			p3="-a,c,6*a"
+			n1="0.57,-0.57,-0.57"
+			n2="0.57,-0.57,0.57"
+			n3="-0.57,-0.57,0.57"
+			color="1,1,1"
+			intensity="8000">
+		</trianglelight>
+
+		<triangle
+			p1="-a,c,6*a"
+			p2="-a,c,-6*a"
+			p3="a,c,-6*a"
+			n1="0,-1,0"
+			n2="0,-1,0"
+			n3="0,-1,0"
+			material="matluz">
+		</triangle>
+
+		<triangle
+			p1="a,c,-6*a"
+			p2="a,c,6*a"
+			p3="-a,c,6*a"
+			n1="0,-1,0"
+			n2="0,-1,0"
+			n3="0,-1,0"
+			material="matluz">
+		</triangle>
+
+	</scene>
+
+
+
+
+
+
+
+
+	<scene 
+		name="test" 
+		
+		width="640" 
+		height="480"
+		subwidth2="270,340"
+		subheight2="230,260"
+
+		camerapos="-0.5,2.3,2.3"
+		cameraend="0,0,0"
+		camerapos2="0,2.5,9"
+		cameraend2="0,2.5,0"
+		camerafov="40"
+		deep="2"
+
+		BDoubleSided="false"
+				
+		BOctrees="true"
+		octreesdeep="1"
+		octreesnumonleaf="50"
+
+		BShadows="true"
+		BTransformations="true"
+		BTextures="true"
+		shadowpass="1"
+		rendersamples="50"
+		antialiasing="PRT_ANTIALIASING_JITTER"
+		
+		dof="true"
+		dofpoint="-0.097375,0.447922,0.447922"
+		dofaperture="0.02"
+		
+		photonmap="false"
+		numphotones="1000"
+		groupphotones="20"
+		scalephoton="0.000001"
+		>
+
+		<variables a="0.4" b="5" c="5"/>
+		
+		<texture
+			name="tex1"
+			type="PRT_TEXTURE_PERLIN_CLOUD"
+			color1="0.5,0.6,0.8"
+			color2="0,0,0"
+			scale="50"
+			alpha="2"
+			beta="5"
+			n="5"/>
+		
+		<texture
+			name="tex2"
+			type="PRT_TEXTURE_BITMAP"
+			path="D:\PiscisRT\Elements\misc\test.png"/>
+		
+		<material 
+			name="mat"
+			color="0.0,0.0,0.0"
+			texture2="tex1"
+			bumpmap2="tex1"
+			bumpfactor="0.3"
+			refraction2="0.6"
+			gireflection="0.2"
+			reflection="0.6"/>
+
+		<material 
+			name="matluz"
+			color="1,1,1"
+			forced="true"/>
+
+		<material 
+			name="matsuelo"
+			color="0.0,1.0,0.0"
+			ambientcolor="0.07,0.07,0.07"
+			texture2="tex2"
+			bumpmap2="tex1"
+			bumpfactor="0.3"
+			gireflection="0.2"
+			reflection2="0.6"
+			BRDFtype="BRDF_PHONG"/>
+
+<!--	SUELO	-->
+
+		<rectangle
+			p1="b,0,b"
+			p2="b,0,-b"
+			p3="-b,0,-b"
+			p4="-b,0,b"
+			n1="0,1,0"
+			n2="0,1,0"
+			n3="0,1,0"
+			n4="0,1,0"
+			t1="1,0"
+			t2="1,1"
+			t3="0,1"
+			t4="0,0"
+			material="matsuelo"/>
+
+		<!--<rectangle
+			p1="-b,0,-b"
+			p2="b,0,-b"
+			p3="b,2*b,-b"
+			p4="-b,2*b,-b"
+			n1="0,0,1"
+			n2="0,0,1"
+			n3="0,0,1"
+			n4="0,0,1"
+			t1="0,0"
+			t2="1,0"
+			t3="1,1"
+			t4="0,1"
+			material="matsuelo">
+		</rectangle> 
+
+		<rectangle
+			p1="-b,0,b"
+			p2="-b,0,-b"
+			p3="-b,2*b,-b"
+			p4="-b,2*b,b"
+			n1="1,0,0"
+			n2="1,0,0"
+			n3="1,0,0"
+			n4="1,0,0"
+			t1="0,0"
+			t2="1,0"
+			t3="1,1"
+			t4="0,1"
+			material="matsuelo">
+		</rectangle>
+
+		<rectangle
+			p1="b,0,-b"
+			p2="b,0,b"
+			p3="b,2*b,b"
+			p4="b,2*b,-b"
+			n1="-1,0,0"
+			n2="-1,0,0"
+			n3="-1,0,0"
+			n4="-1,0,0"
+			t1="0,0"
+			t2="1,0"
+			t3="1,1"
+			t4="0,1"
+			material="matsuelo">
+		</rectangle>-->
+
+<!--	OBJETOS	-->
+
+		<sphere
+			center="0.5,0.45,0.19"
+			radius="0.45"
+			material="mat"
+			repu="5"
+			repv="5"/>
+
+		<sphere
+			center="-0.18,0.3,0.72"
+			radius="0.3"
+			material="mat"
+			repu="5"
+			repv="5"/>
+
+		<translate vector="-0.6,0.45,0.2">
+			<rotate axis="1,0,0" angle="90">
+				<cylinder
+					center2="-0.65,0.5,0.3"
+					center="0,0,0"
+					radius="0.15"
+					lenght="0.9"
+					repu="1"
+					repv="1"
+					material="mat"/>
+				<!--<quadric
+					center="0,0,0"
+					a="0.2"
+					b="0.2"
+					c="0.2"
+					type="PRT_QUADRIC_ELLIPSOID"
+					material="matsuelo">
+				</quadric>-->
+			</rotate>
+		</translate>
+		
+
+		<!--<translate vector="0,0.02,0">
+			<mesh
+				path="D:\PiscisRT\Elements\misc\nudo.3ds"
+				material="mat">
+			</mesh>
+		</translate>-->
+
+		<!--<translate vector="0,0.12,0.12">
+			<rotate eje="1,0,0" angulo="-90">
+				<rotate eje="0,1,0" angulo="45">
+					<quartic centro="0,0,0" a="1" b="0.6" tipo="PRT_QUARTIC_TORUS" material="mat"></quartic>
+				</rotate>
+			</rotate>
+		</translate>-->
+
+		<!--<translate vector="0.2,0.0,0">
+			<rotate eje="0,0,1"	angulo="90">
+				<quatjulia centro="0,0,0" c="-1,0.5,0,0" itera="10" material="mat"></quatjulia>
+			</rotate>
+		</translate>-->
+
+<!--	LUZ PUNTUAL	-->
+	
+		<!--<pointlight
+			pos="-3.5,3.7,2"
+			color="1,1,1"
+			intensity="9">
+		</pointlight>-->
+
+		<trianglelight
+			p1="-a,c,6*a"
+			p2="-a,c,-6*a"
+			p3="a,c,-6*a"
+			n1="-0.57,-0.57,0.57"
+			n2="-0.57,-0.57,-0.57"
+			n3="0.57,-0.57,-0.57"
+			color="1,1,1"
+			intensity="8000"/>
+
+		<trianglelight
+			p1="a,c,-6*a"
+			p2="a,c,6*a"
+			p3="-a,c,6*a"
+			n1="0.57,-0.57,-0.57"
+			n2="0.57,-0.57,0.57"
+			n3="-0.57,-0.57,0.57"
+			color="1,1,1"
+			intensity="8000"/>
+
+		<triangle
+			p1="-a,c,6*a"
+			p2="-a,c,-6*a"
+			p3="a,c,-6*a"
+			n1="0,-1,0"
+			n2="0,-1,0"
+			n3="0,-1,0"
+			material="matluz"/>
+
+		<triangle
+			p1="a,c,-6*a"
+			p2="a,c,6*a"
+			p3="-a,c,6*a"
+			n1="0,-1,0"
+			n2="0,-1,0"
+			n3="0,-1,0"
+			material="matluz"/>
+
+	</scene>
+
+
+
+
+
+
+
+
+
+    <scene 
+		name="test1" 
+		
+		width="320" 
+		height="240"
+		subwidth2="90*2,210*2"
+		subheight2="90*2,170*2"
+
+		camerapos="-15,-2,16"
+		cameraend="0,-2,0"
+		cameraup="0,0,1"
+		camerapos2="0,2.5,9"
+		cameraend2="0,2.5,0"
+		camerafov="50"
+		deep="2"
+
+		BDoubleSided="false"
+				
+		BOctrees="true"
+		octreesdeep="1"
+		octreesnumonleaf="50"
+
+		BShadows="true"
+		BTransformations="true"
+		BTextures="true"
+		shadowpass="1"
+		rendersamples="1"
+		antialiasing="0"
+
+		dof="false"
+		dofpoint="0,-2,0"
+		dofaperture="0.45152232"
+		
+		photonmap="false"
+		numphotones="1000"
+		groupphotones="20"
+		scalephoton="0.000001"
+		>
+
+<!--	VARIABLES	-->
+
+		<variables
+			a="0.4"
+			b="5"
+			c="5">
+		</variables>
+		
+<!--	MATERIALES	-->
+
+		<texture
+			name="tex1"
+			type="PRT_TEXTURE_PERLIN_CLOUD"
+			color1="0.5,0.6,0.8"
+			color2="0,0,0"
+			scale="50"
+			alpha="2"
+			beta="5"
+			n="5">
+		</texture>
+
+		<texture
+			name="tex2"
+			type="PRT_TEXTURE_BITMAP"
+			path="D:\PiscisRT\Elements\misc\test.png">
+		</texture>
+		
+		<material 
+			name="mat"
+			color="0.15,0.15,0.15"
+			texture2="tex1"
+			bumpmap2="tex1"
+			bumpfactor="0.3"
+			refraction2="0.6"
+			gireflection="0.2"
+			reflection="0.75">
+		</material>
+
+		<material 
+			name="matluz"
+			color="1,1,1"
+			forced="true">
+		</material>
+
+		<material 
+			name="matsuelo"
+			color="1,1,1"
+			ambientcolor="0.1,0.1,0.1"
+			texture2="tex2"
+			bumpmap2="tex1"
+			bumpfactor="0.3"
+			gireflection="0.2"
+			reflection2="0.6"
+			BRDFtype="BRDF_PHONG">
+		</material>
+
+<!--	SUELO	-->
+
+		<rectangle
+			p1="b,0,b"
+			p2="b,0,-b"
+			p3="-b,0,-b"
+			p4="-b,0,b"
+			n1="0,1,0"
+			n2="0,1,0"
+			n3="0,1,0"
+			n4="0,1,0"
+			t1="1,0"
+			t2="1,1"
+			t3="0,1"
+			t4="0,0"
+			material="matsuelo">
+		</rectangle>
+		<!--<rectangle
+			p1="-b,0,-b"
+			p2="b,0,-b"
+			p3="b,2*b,-b"
+			p4="-b,2*b,-b"
+			n1="0,0,1"
+			n2="0,0,1"
+			n3="0,0,1"
+			n4="0,0,1"
+			t1="0,0"
+			t2="1,0"
+			t3="1,1"
+			t4="0,1"
+			material="matsuelo">
+		</rectangle> 
+
+		<rectangle
+			p1="-b,0,b"
+			p2="-b,0,-b"
+			p3="-b,2*b,-b"
+			p4="-b,2*b,b"
+			n1="1,0,0"
+			n2="1,0,0"
+			n3="1,0,0"
+			n4="1,0,0"
+			t1="0,0"
+			t2="1,0"
+			t3="1,1"
+			t4="0,1"
+			material="matsuelo">
+		</rectangle>
+
+		<rectangle
+			p1="b,0,-b"
+			p2="b,0,b"
+			p3="b,2*b,b"
+			p4="b,2*b,-b"
+			n1="-1,0,0"
+			n2="-1,0,0"
+			n3="-1,0,0"
+			n4="-1,0,0"
+			t1="0,0"
+			t2="1,0"
+			t3="1,1"
+			t4="0,1"
+			material="matsuelo">
+		</rectangle>-->
+
+<!--	OBJETOS	-->
+
+		<sphere
+			center="1,-5,3"
+			radius="3"
+			material="mat"
+			repu="5"
+			repv="5">
+		</sphere>
+
+		<sphere
+			center="-4,-2,2"
+			radius="2"
+			material="mat"
+			repu="5"
+			repv="5">
+		</sphere>
+
+		<translate vector="-2,3,0">
+			<rotate axis="1,0,0" angle="90">
+				<cylinder
+					center2="-0.65,0.5,0.3"
+					center="0,0,0"
+					radius="1"
+					lenght="4"
+					repu="1"
+					repv="1"
+					material="mat">
+				</cylinder>
+				<!--<quadric
+					center="0,0,0"
+					a="0.2"
+					b="0.2"
+					c="0.2"
+					type="PRT_QUADRIC_ELLIPSOID"
+					material="matsuelo">
+				</quadric>-->
+			</rotate>
+		</translate>
+		
+
+		<!--<translate vector="0,0.02,0">
+			<mesh
+				path="D:\PiscisRT\Elements\misc\nudo.3ds"
+				material="mat">
+			</mesh>
+		</translate>-->
+
+		<!--<translate vector="0,0.12,0.12">
+			<rotate eje="1,0,0" angulo="-90">
+				<rotate eje="0,1,0" angulo="45">
+					<quartic centro="0,0,0" a="1" b="0.6" tipo="PRT_QUARTIC_TORUS" material="mat"></quartic>
+				</rotate>
+			</rotate>
+		</translate>-->
+
+		<!--<translate vector="0.2,0.0,0">
+			<rotate eje="0,0,1"	angulo="90">
+				<quatjulia centro="0,0,0" c="-1,0.5,0,0" itera="10" material="mat"></quatjulia>
+			</rotate>
+		</translate>-->
+
+<!--	LUZ PUNTUAL	-->
+	
+<pointlight pos="-5,0,10" color="10/15,1,0.1/15" intensity="15"></pointlight>
+<pointlight pos="-4,0,10" color="9/15,1,1/15" intensity="15"></pointlight>
+<pointlight pos="-3,0,10" color="8/15,1,2/15" intensity="15"></pointlight>
+<pointlight pos="-2,0,10" color="7/15,1,3/15" intensity="15"></pointlight>
+<pointlight pos="-1,0,10" color="6/15,1,4/15" intensity="15"></pointlight>
+<pointlight pos="0,0,10" color="5/15,1,5/15" intensity="15"></pointlight>
+<pointlight pos="1,0,10" color="4/15,1,6/15" intensity="15"></pointlight>
+<pointlight pos="2,0,10" color="3/15,1,7/15" intensity="15"></pointlight>
+<pointlight pos="3,0,10" color="2/15,1,8/15" intensity="15"></pointlight>
+<pointlight pos="4,0,10" color="1/15,1,9/15" intensity="15"></pointlight>
+<pointlight pos="5,0,10" color="0.1/15,1,10/15" intensity="15"></pointlight>
+
+		<!--<trianglelight
+			p1="-a,c,6*a"
+			p2="-a,c,-6*a"
+			p3="a,c,-6*a"
+			n1="-0.57,-0.57,0.57"
+			n2="-0.57,-0.57,-0.57"
+			n3="0.57,-0.57,-0.57"
+			color="1,1,1"
+			intensity="8000">
+		</trianglelight>
+
+		<trianglelight
+			p1="a,c,-6*a"
+			p2="a,c,6*a"
+			p3="-a,c,6*a"
+			n1="0.57,-0.57,-0.57"
+			n2="0.57,-0.57,0.57"
+			n3="-0.57,-0.57,0.57"
+			color="1,1,1"
+			intensity="8000">
+		</trianglelight>
+
+		<triangle
+			p1="-a,c,6*a"
+			p2="-a,c,-6*a"
+			p3="a,c,-6*a"
+			n1="0,-1,0"
+			n2="0,-1,0"
+			n3="0,-1,0"
+			material="matluz">
+		</triangle>
+
+		<triangle
+			p1="a,c,-6*a"
+			p2="a,c,6*a"
+			p3="-a,c,6*a"
+			n1="0,-1,0"
+			n2="0,-1,0"
+			n3="0,-1,0"
+			material="matluz">
+		</triangle>-->
+
+	</scene>
+
+
+
+
+
+
+
+
+
+</piscisrt>

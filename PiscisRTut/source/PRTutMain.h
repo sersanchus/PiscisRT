@@ -24,9 +24,10 @@
 //                                                                           //
 //---------------------------------------------------------------------------//
 
-//#include "../extincs/expat.h"
+#ifdef _WIN32
 #include "../extincs/Python/Python.h"
-#include "../extincs/expatpp.h"
+#endif
+#include "../extlibs/expatpp/src_pp/expatpp.h"
 #include "../../PiscisRT/source/PRTMain.h" //trazador
 //#include "../extincs/aviFree/AviFree.h"
 #include <map>
@@ -58,6 +59,10 @@ using namespace std;
 	//	#define PISCISRTUT_API __declspec(dllimport)
 	//#endif
 #endif
+#endif
+
+#ifdef __APPLE__
+#define PISCISRTUT_API
 #endif
 
 #define PRT_ANTIALIASING_NONE			101

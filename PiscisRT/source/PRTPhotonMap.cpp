@@ -415,7 +415,7 @@ void PRTPhotonMap::ReadFromDisk(const char *fileName,int numPhotons)
 	if (file==NULL) 
 		fprintf(stderr,"Failed to open photon map file %s.\n",fileName);
 
-	assert((int)(photons,sizeof(PRTPhoton),numPhotons,file)==numPhotons);
+//	assert((int)(photons,sizeof(PRTPhoton),numPhotons,file)==numPhotons);
 	fclose(file);
 
 	storedphotons=numPhotons;

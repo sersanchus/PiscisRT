@@ -26,6 +26,7 @@
 
 #include "PRTutMain.h"
 
+#ifdef _WIN32
 BOOL APIENTRY DllMain(HANDLE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
 {
     switch (ul_reason_for_call)
@@ -38,6 +39,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
     }
     return TRUE;
 }
+#endif
 
 PRTutMain::PRTutMain(void)
 {
@@ -87,7 +89,9 @@ PRTutMain::PRTutMain(void)
 
 bool PRTutMain::PRTutParse(string fichero,string escena,PRTMain* prtmain,unsigned int &ancho2,unsigned int &alto2,unsigned int &antialiasing2,double tiempo)
 {
+#ifdef __WIN32
 	Py_Initialize();
+#endif
 
 	trazador=prtmain;
 	t=tiempo;
@@ -111,6 +115,7 @@ bool PRTutMain::PRTutParse(string fichero,string escena,PRTMain* prtmain,unsigne
 	{
 		size_t len = fread(buf, 1, sizeof(buf), fich);
 		done = len < sizeof(buf);
+		
 		if (!XML_Parse(buf, len, done)) 
 		{
 			fprintf(stderr,"%s at line %d\n",XML_ErrorString(XML_GetErrorCode()),XML_GetCurrentLineNumber());
@@ -170,7 +175,9 @@ bool PRTutMain::PRTutParse(string fichero,string escena,PRTMain* prtmain,unsigne
 
 	//parseexpr("import dumpmods\ndumpmods.analyze_modules(\"D:\\PiscisRT\\Elements\\out\")");
 	
+#ifdef __WIN32
 	Py_Finalize();
+#endif
 
 	return true;
 }
@@ -333,6 +340,7 @@ PRTutMain::~PRTutMain(void)
 
 double PRTutMain::parseexpr(const char* c) // con variable global t
 {
+#ifdef _WIN32
 	char aux[255];
 	//Py_Initialize();
 	PyObject* globals = PyModule_GetDict(PyImport_ImportModule("__main__"));
@@ -354,6 +362,10 @@ double PRTutMain::parseexpr(const char* c) // con variable global t
 	PyObject *objeto=PyRun_String(aux,Py_eval_input,globals,locals);
 	//Py_Finalize();
 	return PyFloat_AsDouble(objeto);
+#else
+	// unsuported python 
+	return atof(c);
+#endif
 }
 
 int PRTutMain::parseint(const char* c)

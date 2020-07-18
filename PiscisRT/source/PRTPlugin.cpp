@@ -30,6 +30,10 @@
 	#include <dlfcn.h>
 #endif
 
+#ifdef __APPLE__
+#include <string.h>
+#endif
+
 PRTPlugin::PRTPlugin(LPCSTR dllfile)
 {
 #if defined(__MAKE_WINDOWS__) || defined(__MAKE_CYGWIN__)

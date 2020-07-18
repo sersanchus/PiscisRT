@@ -1,4 +1,4 @@
-#include "Consola.h"
+#include "consola.h"
 #include <stdio.h>
 
 Consola::Consola(void)
@@ -13,11 +13,13 @@ Consola::Consola(void)
 	tiempoaprox=0;
 	porcentaje=0;
 	
+#ifdef _WIN32
 	scr=GetStdHandle(STD_OUTPUT_HANDLE);
 
 	GetConsoleScreenBufferInfo(scr,&scrbi);
 	orig=scrbi.dwCursorPosition;
-
+#endif
+	
 	printf("Status         = ");
 	//printf("%f %%",porcentaje*100);
 	printf("\n");
@@ -76,6 +78,7 @@ void Consola::Muestra(void)
 	printf("\n");
 	*/
 
+#ifdef _WIN32
 	GetConsoleScreenBufferInfo(scr,&scrbi);
 	COORD coordini={scrbi.dwCursorPosition.X,scrbi.dwCursorPosition.Y};
 
@@ -106,7 +109,8 @@ void Consola::Muestra(void)
 	//printf("\n");
 
 	SetConsoleCursorPosition(scr,coordini);
-
+#endif
+	
 	/*printf("\n-- ANIMACIÓN --\n\n");
 
 	printf("tiempo         = ");

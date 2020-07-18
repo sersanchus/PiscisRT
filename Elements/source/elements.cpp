@@ -6,7 +6,11 @@
 	#include <afxdlgs.h>
 	#include "../extincs/glutwindows.h"
 #else
-	#include "../extincs/glut.h"
+	#ifdef __APPLE__
+		#include <GLUT/GLUT.h>
+	#else
+		#include "../extincs/glut.h"
+	#endif
 	#include <sys/time.h>
 #endif
 
@@ -20,7 +24,7 @@
 #include <string>
 using namespace std;
 
-#include "Consola.h"
+#include "consola.h"
 
 ///////////////////////////////////////////////
 
@@ -47,8 +51,12 @@ long GetTickCountMio()
 	return GetTickCount();
 #else
 	timeval tv;
+	#ifdef __APPLE__
+	struct timezone tz;
+	#else
 	__timezone_ptr_t tz;
-	gettimeofday(&tv,tz);
+	#endif
+	gettimeofday(&tv,&tz);
 	long res=tv.tv_sec*1000L+tv.tv_usec/1000L;
 	return res;	
 #endif
@@ -341,6 +349,7 @@ void guardarimagen(string salida)
 
 void SelectFromMenu(int idCommand)
 {
+#ifdef _WIN32
 	if (idCommand==0)
 	{
 		string path;
@@ -382,6 +391,7 @@ void SelectFromMenu(int idCommand)
 
 		render(false);
 	}
+#endif
 }
 
 static void keyboard(unsigned char key,int x,int y)

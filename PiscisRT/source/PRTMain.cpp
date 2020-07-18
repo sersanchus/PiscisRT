@@ -269,7 +269,7 @@ void PRTMain::AddMesh(char* fich, PRTMaterial* mat)
 			aux=new PRTMesh(&fdat->geomdat[i],mat);
 			ObjectsList.AddAtEnd(aux);
 		}
-		for (i=0;i<fdat->nummesh;i++)
+		for (unsigned int i=0;i<fdat->nummesh;i++)
 			delete fdat->geomdat[i].vertexes;
 		delete fdat;
 	}

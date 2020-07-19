@@ -97,7 +97,7 @@ public:
 		\param tc test cull actived?
 		\param trans transformations actived or not?
 	*/
-	PRTIntersectPoint Intersect(PRTObject *o,bool tc,bool trans=false);
+	PRTIntersectPoint Intersect(PRTObject *o,bool tc,bool trans=false) const;
 	
 //--------------------------------------------------------------------------------------
 

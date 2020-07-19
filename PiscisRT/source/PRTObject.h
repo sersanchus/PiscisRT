@@ -151,7 +151,7 @@ public:
 		\param doublesided forced or not
 		\return PRTIntersectPoint the point of intersection if any
 	*/
-	virtual PRTIntersectPoint ComputeIntersection(PRTRay ray,bool doublesided)=0;
+	virtual bool ComputeIntersection(const PRTRay& ray, bool doublesided, PRTIntersectPoint& result)=0;
 
 //--------------------------------------------------------------------------------------
 	
@@ -161,7 +161,7 @@ public:
 		\param doublesided forced or not
 		\return PRTIntersectPoint the point of intersection if any
 	*/
-	PRTIntersectPoint ComputeTransformatedIntersection(PRTRay ray,bool doublesided);
+	bool ComputeTransformatedIntersection(const PRTRay& ray,bool doublesided, PRTIntersectPoint& result);
 	
 //--------------------------------------------------------------------------------------
 	

@@ -56,7 +56,7 @@ public:
 		\param ray the PRTRay
 		\return bool there is an intersection, first convex hull of ray with convex hull of the object, then if true ray with convex hull of the object, in all cases the convex box is used and not the convex sphere
 	*/
-	bool IntersectWithRay(PRTRay ray);
+	bool IntersectWithRay(const PRTRay& ray);
 
 //--------------------------------------------------------------------------------------
 

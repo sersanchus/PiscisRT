@@ -169,14 +169,14 @@ PRTVector PRTQuartic::ComputeColor(PRTVector)
 	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTQuartic::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTQuartic::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
+	result.distance = PRTINFINITE;
 
 	//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// NOT ENHANCED //*TODO*
 
@@ -216,7 +216,7 @@ PRTIntersectPoint PRTQuartic::ComputeIntersection(PRTRay r,bool testcull)
 			if(s[penemore]>EPSILON && s[penemore]<fint) 	
 				fint=s[penemore];
 			else if (testcull && s[penemore]<-EPSILON) //we are inside
-				return aux;
+				return result.collision;
 		}
 	}
 	/*if (num>1 && s[1]>EPSILON && s[1]<fint)
@@ -229,12 +229,12 @@ PRTIntersectPoint PRTQuartic::ComputeIntersection(PRTRay r,bool testcull)
 	if (fint!=PRTINFINITE)
 	{
 		//fint=40;
-		aux.collision=true;
-		aux.distance=fint;
-		aux.point=r.orig+r.dir*fint;
-		return aux;
+		result.collision=true;
+		result.distance=fint;
+		result.point=r.orig+r.dir*fint;
+		return true;
 	}
 
-	return aux;
+	return result.collision;
 }
 

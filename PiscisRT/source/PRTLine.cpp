@@ -114,15 +114,12 @@ PRTVector PRTLine::ComputeColor(PRTVector p)
 	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTLine::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTLine::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-
-	PRTIntersectPoint aux;
-
 	//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// OBJECT'S INTERSECTION -------------------------------------------------------------------
 
@@ -163,12 +160,12 @@ PRTIntersectPoint PRTLine::ComputeIntersection(PRTRay r,bool testcull)
 	PRTVector ret;
 	if (HitBoundingBox(ch2.chbeg,ch2.chend,PRTVector(aux3.x,aux3.y,aux3.z),PRTVector(aux4.x,aux4.y,aux4.z),ret))
 	{
-		aux.collision=true;
+		result.collision=true;
 		PRTVector4 aux5=mat2*ret-trans;
-		aux.point=PRTVector(aux5.x,aux5.y,aux5.z);
-		aux.distance=(aux.point-r.orig).Module();
+		result.point=PRTVector(aux5.x,aux5.y,aux5.z);
+		result.distance=(result.point-r.orig).Module();
 	}
 	
-	return aux;
+	return result.collision;
 }
 

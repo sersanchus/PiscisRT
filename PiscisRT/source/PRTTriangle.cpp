@@ -390,16 +390,16 @@ PRTVector PRTTriangle::ComputeColor(PRTVector p)
 	return c1+vaux2+vaux3;
 }
 
-PRTIntersectPoint PRTTriangle::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTTriangle::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
 	// NOT ENHANCED
 
-	PRTIntersectPoint aux;
-
+	result.distance = PRTINFINITE;
+	
 	//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// OBJECT'S INTERSECTION -------------------------------------------------------------------
 
@@ -422,20 +422,20 @@ PRTIntersectPoint PRTTriangle::ComputeIntersection(PRTRay r,bool testcull)
 		if (testcull) //testcull activated
 		{
 			if(det<EPSILON)
-				return aux;
+				return false;
 			tvec=r.orig-p1;
 			u=tvec*pvec;
 			PRTFloat liminf=(/*0.0+*/DELTA*det);
 			PRTFloat limsup=(det-DELTA*det);
 			if (u<liminf || u>limsup)
-				return aux;
+				return false;
 			qvec=tvec^edge1;
 			v=r.dir*qvec;
 			if (v<liminf || u+v>limsup)
-				return aux;
+				return false;
 			t=edge2*qvec;
 			if (t<LAMBDA)
-				return aux; //*TODO* only in the ray's direction
+				return false; //*TODO* only in the ray's direction
 			inv_det=PRTFloat(1.0)/det;
 			t*=inv_det;
 			//u*=inv_det;
@@ -444,30 +444,30 @@ PRTIntersectPoint PRTTriangle::ComputeIntersection(PRTRay r,bool testcull)
 		else
 		{
 			if(det>-EPSILON && det<EPSILON)
-				return aux;
+				return false;
 			inv_det=PRTFloat(1.0)/det;
 			tvec=r.orig-p1;
 			u=(tvec*pvec)*inv_det;
 			PRTFloat liminf=/*0.0+*/DELTA;
 			PRTFloat limsup=PRTFloat(1.0)-DELTA;
 			if(u<liminf || u>limsup)
-				return aux;
+				return false;
 			qvec=tvec^edge1;
 			v=(r.dir*qvec)*inv_det;
 			if(v<liminf||u+v>limsup)
-				return aux;
+				return false;
 			t=(edge2*qvec)*inv_det;
 			if (t<LAMBDA)
-				return aux;
+				return false;
 		}
 
-		aux.collision=true;
-		aux.distance=t;
-		aux.point=r.orig+r.dir*t;
+		result.collision=true;
+		result.distance=t;
+		result.point=r.orig+r.dir*t;
 		//aux.u=u;
 		//aux.v=v;
 	}
 
-	return aux;
+	return result.collision;
 }
 

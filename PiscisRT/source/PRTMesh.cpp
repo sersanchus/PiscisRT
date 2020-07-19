@@ -144,10 +144,10 @@ PRTVector PRTMesh::ComputeColor(PRTVector p)
 	return what->ComputeColor(p);
 }
 
-PRTIntersectPoint PRTMesh::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTMesh::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
-
+	result.distance = PRTINFINITE;
+	
 	PRTArray<PRTObject*> list;
 //	bool borra=false;
 	//if (!BOctrees || Octrees==NULL) // si lo del octree esrootsolo se tendria que dejar que se pusiera octreesdeep==0
@@ -161,10 +161,10 @@ PRTIntersectPoint PRTMesh::ComputeIntersection(PRTRay r,bool testcull)
 	for (unsigned int i=0;i<list.Length();i++)
 	{
 		PRTIntersectPoint aux2;
-		aux2=list.GetAtPos(i)->ComputeIntersection(r,testcull);
-		if (aux2.collision && aux2.distance<aux.distance)
+		bool aux2collide = list.GetAtPos(i)->ComputeIntersection(r,testcull, aux2);
+		if (aux2collide && aux2.distance<result.distance)
 		{
-			aux=aux2;
+			result=aux2;
 			what=list.GetAtPos(i);
 		}
 	}
@@ -172,5 +172,5 @@ PRTIntersectPoint PRTMesh::ComputeIntersection(PRTRay r,bool testcull)
 //	if (borra)
 //		delete ejem;
 		
-	return aux;
+	return result.collision;
 }

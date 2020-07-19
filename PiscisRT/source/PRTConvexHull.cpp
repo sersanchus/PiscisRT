@@ -27,7 +27,7 @@
 #include "PRTConvexHull.h"
 #include "PRTUtil.h"
 
-bool PRTConvexHull::IntersectWithRay(PRTRay r)
+bool PRTConvexHull::IntersectWithRay(const PRTRay& r)
 {
 	//RAY'S CONVEX HULL WITH OBJECT'S CONVEX HULL ----------------------------------------------
 

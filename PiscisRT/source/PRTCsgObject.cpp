@@ -126,12 +126,11 @@ PRTVector PRTCsgObject::ComputeColor(PRTVector p)
 //	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTCsgObject::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
 	// NOT ENHANCED *TODO*
-
-	PRTIntersectPoint aux;
-
+	result.distance = PRTINFINITE;
+	
 	switch (type)
 	{
 	case PRT_CSG_UNION:
@@ -139,21 +138,23 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 			//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 			if (!o2->convexhull.IntersectWithRay(r) && !o1->convexhull.IntersectWithRay(r))
-				return aux;
+				return false;
 
 			// OBJECT'S INTERSECTION -------------------------------------------------------------------
 			
-			PRTIntersectPoint aux1=o1->ComputeIntersection(r,0);//testcull);
-			PRTIntersectPoint aux2=o2->ComputeIntersection(r,0);//testcull);
+			PRTIntersectPoint aux1, aux2;
+			
+			o1->ComputeIntersection(r,0, aux1);//testcull);
+			o2->ComputeIntersection(r,0, aux2);//testcull);
 			if(aux1.distance<aux2.distance)
 			{
-				aux=aux1;
+				result=aux1;
 				material=o1->material;//*TODO* material
 				what=1;
 			}
 			else
 			{
-				aux=aux2;
+				result=aux2;
 				material=o2->material;
 				what=2;
 			}
@@ -164,12 +165,13 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 			//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 			if (!o2->convexhull.IntersectWithRay(r) || !o1->convexhull.IntersectWithRay(r))
-				return aux;
+				return false;
 
 			// OBJECT'S INTERSECTION -------------------------------------------------------------------
 
-			PRTIntersectPoint aux1=o1->ComputeIntersection(r,0);//testcull);
-			PRTIntersectPoint aux2=o2->ComputeIntersection(r,0);//testcull);
+			PRTIntersectPoint aux1, aux2;
+			o1->ComputeIntersection(r,0, aux1);//testcull);
+			o2->ComputeIntersection(r,0, aux2);//testcull);
 			PRTIntersectPoint aux3;
 			PRTIntersectPoint aux4;
 			
@@ -179,21 +181,21 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 			{
 				if(aux1.collision && aux2.collision)
 				{
-					aux3=o1->ComputeIntersection(PRTRay(aux1.point+(r.dir*PRTFloat(0.001)),r.dir),0);//testcull);1?*TODO*
+					o1->ComputeIntersection(PRTRay(aux1.point+(r.dir*PRTFloat(0.001)),r.dir),0,aux3);//testcull);1?*TODO*
 					if (aux3.collision)	aux3.distance+=aux1.distance+PRTFloat(0.001);
-					aux4=o2->ComputeIntersection(PRTRay(aux2.point+(r.dir*PRTFloat(0.001)),r.dir),0);//testcull);
+					o2->ComputeIntersection(PRTRay(aux2.point+(r.dir*PRTFloat(0.001)),r.dir),0,aux4);//testcull);
 					if (aux4.collision)	aux4.distance+=aux2.distance+PRTFloat(0.001);
 					
 					if ((aux1.distance<aux2.distance && aux2.distance<aux3.distance))
 					{
-						aux=aux2;
+						result=aux2;
 						material=o2->material;//*TODO* material
 						no=true;
 						what=2;
 					}
 					else if ((aux2.distance<aux1.distance && aux1.distance<aux4.distance))
 					{
-						aux=aux1;
+						result=aux1;
 						material=o1->material;//*TODO* material
 						no=true;
 						what=1;
@@ -214,34 +216,35 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 			//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 			if (!o1->convexhull.IntersectWithRay(r)) // because the order is o1-o2
-				return aux;
+				return false;
 
 			// OBJECT'S INTERSECTION -------------------------------------------------------------------
 
-			PRTIntersectPoint aux1=o1->ComputeIntersection(r,0);//testcull);
-			PRTIntersectPoint aux2=o2->ComputeIntersection(r,0);//testcull);
+			PRTIntersectPoint aux1, aux2;
+			o1->ComputeIntersection(r,0,aux1);//testcull);
+			o2->ComputeIntersection(r,0,aux2);//testcull);
 			PRTIntersectPoint aux3;
 			PRTIntersectPoint aux4;
 			if (aux1.collision && aux2.collision)
 			{
 				if(aux1.distance<aux2.distance)
 				{
-					aux=aux1;
+					result=aux1;
 					material=o1->material;//*TODO* material
 					what=1;
 				}
 				else
 				{
-					aux3=o1->ComputeIntersection(PRTRay(aux1.point+(r.dir*PRTFloat(0.001)),r.dir),0);//testcull);
+					o1->ComputeIntersection(PRTRay(aux1.point+(r.dir*PRTFloat(0.001)),r.dir),0,aux3);//testcull);
 					if (aux3.collision)	aux3.distance+=aux1.distance+PRTFloat(0.001);
-					aux4=o2->ComputeIntersection(PRTRay(aux2.point+(r.dir*PRTFloat(0.001)),r.dir),0);//testcull);
+					o2->ComputeIntersection(PRTRay(aux2.point+(r.dir*PRTFloat(0.001)),r.dir),0,aux4);//testcull);
 					if (aux4.collision)	aux4.distance+=aux2.distance+PRTFloat(0.001);
 
 					if (aux3.collision && aux4.collision)
 					{
 						if (aux4.distance<aux3.distance)
 						{
-							aux=aux4;
+							result=aux4;
 							material=o2->material;//*TODO* material
 							what=2;
 						}
@@ -254,7 +257,7 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 					{
 						if (!aux4.collision)
 						{
-							aux=aux1;
+							result=aux1;
 							material=o1->material;
 							what=1;
 						}
@@ -265,7 +268,7 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 			{
 				if (aux1.collision)
 				{
-					aux=aux1;
+					result=aux1;
 					material=o1->material;
 					what=1;
 				}
@@ -274,5 +277,5 @@ PRTIntersectPoint PRTCsgObject::ComputeIntersection(PRTRay r,bool testcull)
 		break;
 	}
 
-	return aux;
+	return result.collision;
 }

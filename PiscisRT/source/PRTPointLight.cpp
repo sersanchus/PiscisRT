@@ -57,16 +57,18 @@ PRTVector PRTPointLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collision,
 			//ther is any object between?
 							
 			PRTRay rayodesombra(lightpos,(((collision.point)-lightpos)).Normalize());
-			PRTListMember *o2=main->ObjectsList.first;
+//			PRTListMember *o2=main->ObjectsList.first;
 			PRTFloat LAMBDA=PRTFloat(0.000001);
 			bool seguroqsi=false;
 
-			while (!seguroqsi && o2!=NULL)
+//			while (!seguroqsi && o2!=NULL)
+			for (unsigned int i=0; i<!seguroqsi && main->ObjectsList.Length(); i++)
 			{
+				PRTObject* obj = main->ObjectsList.GetAtPos(i);
 				PRTIntersectPoint sombrainter;//auxiliar collision
-				if (object!=((PRTObject*)(o2->object)))
+				if (object!=obj)
 				{
-					sombrainter=rayodesombra.Intersect((PRTObject*)o2->object,!main->BDoubleSided,main->BTransformations);
+					sombrainter=rayodesombra.Intersect(obj,!main->BDoubleSided,main->BTransformations);
 					//main->numintertest+=rayodesombra.numrayintertest;
 				
 					PRTFloat dissombra=(sombrainter.point-lightpos).Module();
@@ -76,7 +78,7 @@ PRTVector PRTPointLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collision,
 						shadow=PRTVector(0,0,0);
 					}
 				}
-				o2=o2->next;
+//				o2=o2->next;
 			}
 		}
 		/*

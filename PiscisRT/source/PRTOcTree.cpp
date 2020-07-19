@@ -29,7 +29,7 @@
 #include "PRTVector.h"
 #include "PRTObject.h"
 
-PRTDinamicList *objini;
+const PRTArray<PRTObject*>* objini;
 
 PRTOcTreeNode::PRTOcTreeNode(PRTFloat mx,PRTFloat my,PRTFloat mz,PRTFloat Mx,PRTFloat My,PRTFloat Mz,bool leaf2,PRTOcTreeNode* wasfather)
 {
@@ -44,31 +44,35 @@ PRTOcTreeNode::PRTOcTreeNode(PRTFloat mx,PRTFloat my,PRTFloat mz,PRTFloat Mx,PRT
 	if (father==NULL) //father node
 	{
 		objects=new PRTDinamicList();
-		PRTListMember *o=objini->first;
-		while (o!=NULL)
-		{		
+//		PRTListMember *o=objini->first;
+//		while (o!=NULL)
+		for (unsigned int i=0; i<objini->Length(); i++)
+		{
+			PRTObject* obj = objini->GetAtPos(i);
 			// if the object is inside the node save it
 			
-			if ((PRTVector(minx,miny,minz)<=((PRTObject*)(o->object))->convexhull.chend) && (PRTVector(maxx,maxy,maxz)>=((PRTObject*)(o->object))->convexhull.chbeg))
+			if ((PRTVector(minx,miny,minz)<=obj->convexhull.chend) && (PRTVector(maxx,maxy,maxz)>=obj->convexhull.chbeg))
 			{
-				objects->AddAtEnd(o->object);
+				objects->AddAtEnd(obj);
 			}
-			o=o->next;	
+//			o=o->next;
 		}
 	}
 	else
 	{
 		objects=new PRTDinamicList();
-		PRTListMember *o=father->objects->first;
-		while (o!=NULL)
-		{		
+//		PRTListMember *o=father->objects->first;
+//		while (o!=NULL)
+		for (unsigned int i=0; i<objini->Length(); i++)
+		{
+			PRTObject* obj = objini->GetAtPos(i);
 			// if the object is inside the node save it
 			
-			if ((PRTVector(minx,miny,minz)<=((PRTObject*)(o->object))->convexhull.chend) && (PRTVector(maxx,maxy,maxz)>=((PRTObject*)(o->object))->convexhull.chbeg))
+			if ((PRTVector(minx,miny,minz)<=obj->convexhull.chend) && (PRTVector(maxx,maxy,maxz)>=obj->convexhull.chbeg))
 			{
-				objects->AddAtEnd(o->object);
+				objects->AddAtEnd(obj);
 			}
-			o=o->next;	
+//			o=o->next;
 		}
 	}
 }
@@ -147,17 +151,17 @@ PRTOcTreeNode* recursive(PRTFloat mx,PRTFloat my,PRTFloat mz,PRTFloat Mx,PRTFloa
 	return aux;
 }
 
-PRTOcTree::PRTOcTree(PRTFloat mx,PRTFloat my,PRTFloat mz,PRTFloat Mx,PRTFloat My,PRTFloat Mz,unsigned int deep2,unsigned int numonleaf2,PRTDinamicList *oini)
+PRTOcTree::PRTOcTree(PRTFloat mx,PRTFloat my,PRTFloat mz,PRTFloat Mx,PRTFloat My,PRTFloat Mz,unsigned int deep2,unsigned int numonleaf2,const PRTArray<PRTObject*>& oini)
 {
 	root=NULL;
-	objini=oini;
+	objini=&oini;
 	numonleaf=numonleaf2;
 	deep=deep2;
 	if (deep>0)
 		root=recursive(mx,my,mz,Mx,My,Mz,deep,numonleaf,NULL); //it makes all the work
 }
 
-void findrecursive(PRTRay* r,PRTObject* discarded,PRTOcTreeNode* aux,PRTDinamicList* exit)
+void findrecursive(const PRTRay& r,PRTObject* discarded,PRTOcTreeNode* aux,PRTArray<PRTObject*>& exit)
 {
 	if (aux)
 	{
@@ -165,11 +169,11 @@ void findrecursive(PRTRay* r,PRTObject* discarded,PRTOcTreeNode* aux,PRTDinamicL
 		PRTFloat tnear=-PRTINFINITE;
 		PRTFloat tfar=PRTINFINITE;
 
-		if (r->dir.x==0){if (r->orig.x<aux->minx || r->orig.x>aux->maxx) return;}
+		if (r.dir.x==0){if (r.orig.x<aux->minx || r.orig.x>aux->maxx) return;}
 		else 
 		{
-			PRTFloat t1=(aux->minx-r->orig.x)/r->dir.x;
-			PRTFloat t2=(aux->maxx-r->orig.x)/r->dir.x;
+			PRTFloat t1=(aux->minx-r.orig.x)/r.dir.x;
+			PRTFloat t2=(aux->maxx-r.orig.x)/r.dir.x;
 			if (t1>t2)
 			{
 				PRTFloat penemore=t1;
@@ -181,11 +185,11 @@ void findrecursive(PRTRay* r,PRTObject* discarded,PRTOcTreeNode* aux,PRTDinamicL
 			if (tnear>tfar)	return;
 			if (tfar<0)	return;
 		}
-		if (r->dir.y==0){if (r->orig.y<aux->miny || r->orig.y>aux->maxy) return;}
+		if (r.dir.y==0){if (r.orig.y<aux->miny || r.orig.y>aux->maxy) return;}
 		else
 		{
-			PRTFloat t1=(aux->miny-r->orig.y)/r->dir.y;
-			PRTFloat t2=(aux->maxy-r->orig.y)/r->dir.y;
+			PRTFloat t1=(aux->miny-r.orig.y)/r.dir.y;
+			PRTFloat t2=(aux->maxy-r.orig.y)/r.dir.y;
 			if (t1>t2)
 			{
 				PRTFloat penemore=t1;
@@ -197,11 +201,11 @@ void findrecursive(PRTRay* r,PRTObject* discarded,PRTOcTreeNode* aux,PRTDinamicL
 			if (tnear>tfar)	return;
 			if (tfar<0)	return;
 		}
-		if (r->dir.z==0){if (r->orig.z<aux->minz || r->orig.z>aux->maxz) return;}
+		if (r.dir.z==0){if (r.orig.z<aux->minz || r.orig.z>aux->maxz) return;}
 		else
 		{
-			PRTFloat t1=(aux->minz-r->orig.z)/r->dir.z;
-			PRTFloat t2=(aux->maxz-r->orig.z)/r->dir.z;
+			PRTFloat t1=(aux->minz-r.orig.z)/r.dir.z;
+			PRTFloat t2=(aux->maxz-r.orig.z)/r.dir.z;
 			if (t1>t2)
 			{
 				PRTFloat penemore=t1;
@@ -220,7 +224,7 @@ void findrecursive(PRTRay* r,PRTObject* discarded,PRTOcTreeNode* aux,PRTDinamicL
 			while (o!=NULL)
 			{		
 				if (((PRTObject*)(o->object))!=discarded)
-					exit->AddAtEnd(o->object);
+					exit.AddAtEnd((PRTObject*)(o->object));
 				o=o->next;	
 			}
 		}
@@ -238,11 +242,10 @@ void findrecursive(PRTRay* r,PRTObject* discarded,PRTOcTreeNode* aux,PRTDinamicL
 	}
 }
 
-PRTDinamicList* PRTOcTree::ReturnObjects(PRTRay ray,PRTObject* d)
+void PRTOcTree::ReturnObjects(const PRTRay& ray, PRTObject *discardObject, PRTArray<PRTObject*> & list)
 {
-	PRTDinamicList* aux=new PRTDinamicList();
-	findrecursive(&ray,d,root,aux);
-	return aux;
+	list.Clear();
+	findrecursive(ray,discardObject,root,list);
 }
 
 void deleterecursive(PRTOcTreeNode* aux)

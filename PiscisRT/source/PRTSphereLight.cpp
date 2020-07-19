@@ -72,16 +72,18 @@ PRTVector PRTSphereLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collision
 				//is ther any object between?
 					
 				PRTRay rayodeshadow(lightpos,(((collision.point)-lightpos)).Normalize());
-				PRTListMember *o2=main->ObjectsList.first;
+//				PRTListMember *o2=main->ObjectsList.first;
 				PRTFloat LAMBDA=PRTFloat(0.000001);
 				bool issurethatyes=false;
 
-				while (!issurethatyes && o2!=NULL)
+//				while (!issurethatyes && o2!=NULL)
+				for (unsigned int i=0; i<!issurethatyes && main->ObjectsList.Length(); i++)
 				{
+					PRTObject* obj = main->ObjectsList.GetAtPos(i);
 					PRTIntersectPoint shadowinter;
-					if (object!=((PRTObject*)(o2->object)))
+					if (object!=obj)
 					{
-						shadowinter=rayodeshadow.Intersect((PRTObject*)o2->object,!main->BDoubleSided,false/*main->BTransformations*/);
+						shadowinter=rayodeshadow.Intersect(obj,!main->BDoubleSided,false/*main->BTransformations*/);
 						//main->numintertest+=rayodeshadow.numrayintertest;
 					
 						PRTFloat disshadow=(shadowinter.point-lightpos).Module();
@@ -91,7 +93,7 @@ PRTVector PRTSphereLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collision
 							shadow=PRTVector(0,0,0);
 						}
 					}
-					o2=o2->next;
+//					o2=o2->next;
 				}
 				
 				//*TODO* don't use points that are in the hidden side of the sphere

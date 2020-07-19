@@ -95,16 +95,18 @@ PRTVector PRTTriangleLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collisi
 				//the is any object between?
 					
 				PRTRay shadowray(lightpos,(((collision.point)-lightpos)).Normalize());
-				PRTListMember *o2=main->ObjectsList.first;
+//				PRTListMember *o2=main->ObjectsList.first;
 				PRTFloat LAMBDA=PRTFloat(0.000001);
 				bool surethatyes=false;
 
-				while (!surethatyes && o2!=NULL)
+//				while (!surethatyes && o2!=NULL)
+				for (unsigned int i=0; !surethatyes && i<main->ObjectsList.Length(); i++)
 				{
+					PRTObject* obj = main->ObjectsList.GetAtPos(i);
 					PRTIntersectPoint shadowinter;
-					if (object!=((PRTObject*)(o2->object)))
+					if (object!=obj)
 					{
-						shadowinter=shadowray.Intersect((PRTObject*)o2->object,!main->BDoubleSided,main->BTransformations);
+						shadowinter=shadowray.Intersect(obj,!main->BDoubleSided,main->BTransformations);
 						//main->numintertest+=shadowray.numrayintertest;
 					
 						PRTFloat disshadow=(shadowinter.point-lightpos).Module();
@@ -114,7 +116,7 @@ PRTVector PRTTriangleLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collisi
 							shadow=PRTVector(0,0,0);
 						}
 					}
-					o2=o2->next;
+//					o2=o2->next;
 				}
 				
 				totalshadow+=shadow;

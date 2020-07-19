@@ -94,7 +94,15 @@ PRTMesh::PRTMesh(PRTMeshImpExpObject* data,PRTMaterial* mat)
 
 	//if (BOctrees)
 	{
-		octrees=new PRTOcTree(minx,miny,minz,maxx,maxy,maxz,/*octreesdeep*/5,100,tris);
+		PRTArray<PRTObject*> trislist;
+		PRTListMember* member = tris->first;
+		while(member != NULL)
+		{
+			trislist.AddAtEnd((PRTObject*)member->object);
+			member = member->next;
+		}
+		
+		octrees=new PRTOcTree(minx,miny,minz,maxx,maxy,maxz,/*octreesdeep*/5,100,trislist);
 	}
 
 	delete tris;
@@ -140,29 +148,29 @@ PRTIntersectPoint PRTMesh::ComputeIntersection(PRTRay r,bool testcull)
 {
 	PRTIntersectPoint aux;
 
-	PRTDinamicList* ejem;
-	bool borra=false;
+	PRTArray<PRTObject*> list;
+//	bool borra=false;
 	//if (!BOctrees || Octrees==NULL) // si lo del octree esrootsolo se tendria que dejar que se pusiera octreesdeep==0
 	//	ejem=&ObjectsList;
 	//else // tengo en cuenta los octrees
 	{
-		borra=true;
-		ejem=octrees->ReturnObjects(r,NULL);
+//		borra=true;
+		octrees->ReturnObjects(r, NULL, list);
 	}
 
-	for (unsigned int i=0;i<ejem->Lenght();i++)
+	for (unsigned int i=0;i<list.Length();i++)
 	{
 		PRTIntersectPoint aux2;
-		aux2=((PRTObject*)(ejem->GetAtPos(i)))->ComputeIntersection(r,testcull);
+		aux2=list.GetAtPos(i)->ComputeIntersection(r,testcull);
 		if (aux2.collision && aux2.distance<aux.distance)
 		{
 			aux=aux2;
-			what=((PRTObject*)(ejem->GetAtPos(i)));
+			what=list.GetAtPos(i);
 		}
 	}
 
-	if (borra)
-		delete ejem;
+//	if (borra)
+//		delete ejem;
 		
 	return aux;
 }

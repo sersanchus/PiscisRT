@@ -485,47 +485,52 @@ PRTIntersectPoint PRTMain::FindNearestIntersection(PRTRay r,PRTObject *d)
 	PRTFloat DELTA=PRTFloat(0.000001);
 	PRTIntersectPoint aux; //colision temporal
 	PRTIntersectPoint colisiona; //colision optima, final
-	void* opt=NULL; //objeto optimo
+	PRTObject* opt=NULL; //objeto optimo
 	PRTFloat valoropt=PRTINFINITE; //distancia muy grande, para ir guardando la distancia mas corta
 	PRTVector pointopt;
 	
-	PRTDinamicList* ejem;
-	bool borra=false;
+	PRTArray<PRTObject*> octreeList;
+	PRTArray<PRTObject*>* list;
+//	bool borra=false;
 	if (!BOctrees || Octrees==NULL) // si lo del octree esrootsolo se tendria que dejar que se pusiera octreesdeep==0
-		ejem=&ObjectsList;
+		list = &ObjectsList;
 	else // tengo en cuenta los octrees
 	{
-		borra=true;
-		ejem=Octrees->ReturnObjects(r,d);
+//		borra=true;
+//		ejem = Octrees->ReturnObjects(r,d);
+		Octrees->ReturnObjects(r, d, octreeList);
+		list = &octreeList;
 	}
-	PRTListMember *o=ejem->first;
+//	PRTListMember *o=ejem->first;
 	bool ya=false;
-	while (o!=NULL)
-	{		
+//	while (o!=NULL)
+	for (unsigned int i=0; i<list->Length(); i++)
+	{
+		PRTObject* obj = list->GetAtPos(i);
 		//	...				...				distancia al punto mas cecano del convex hull del objeto
-		if ((((PRTObject*)(o->object))!=d) && ( !ya || ((Module( ((PRTObject*)(o->object))->convexhull.chcen-r.orig )-(((PRTObject*)(o->object))->convexhull.chrad))<valoropt) ) )
+		if ((obj!=d) && ( !ya || ((Module( obj->convexhull.chcen-r.orig )-(obj->convexhull.chrad))<valoropt) ) )
 		{
-			aux=r.Intersect((PRTObject*)(o->object),!BDoubleSided,BTransformations);
+			aux=r.Intersect(obj,!BDoubleSided,BTransformations);
 			//numintertest+=r.numrayintertest;
 			if (aux.collision && aux.distance-DELTA<valoropt)// *TODO* error de precision (objeto delante de otro)
 			{
 				valoropt=aux.distance;
 				pointopt=aux.point;
-				opt=o->object;
+				opt=obj;
 				ya=true;
 			}
 		}
-		o=o->next;
+//		o=o->next;
 	}
 	if (opt!=NULL)
 	{
 		colisiona.collision=true;
 		colisiona.distance=valoropt;
 		colisiona.point=pointopt;
-		colisiona.object=(PRTObject*)opt;
+		colisiona.object=opt;
 	}
-	if (borra)
-		delete ejem;
+//	if (borra)
+//		delete ejem;
 	return colisiona;
 }
 
@@ -644,22 +649,23 @@ bool PRTMain::BuildOctrees(unsigned int deep, unsigned int num)
 		PRTFloat minx=PRTINFINITE;
 		PRTFloat miny=PRTINFINITE;
 		PRTFloat minz=PRTINFINITE;
-		PRTListMember *o=ObjectsList.first;
-		while (o!=NULL)
-		{	
-			PRTObject* obj=((PRTObject*)(o->object));
+//		PRTListMember *o=ObjectsList.first;
+//		while (o!=NULL)
+		for (unsigned int i=0; i<ObjectsList.Length(); i++)
+		{
+			PRTObject* obj = ObjectsList.GetAtPos(i);
 			if (obj->convexhull.chbeg.x<minx) minx=obj->convexhull.chbeg.x;
 			if (obj->convexhull.chbeg.y<miny) miny=obj->convexhull.chbeg.y;
 			if (obj->convexhull.chbeg.z<minz) minz=obj->convexhull.chbeg.z;
 			if (obj->convexhull.chend.x>maxx) maxx=obj->convexhull.chend.x;
 			if (obj->convexhull.chend.y>maxy) maxy=obj->convexhull.chend.y;
 			if (obj->convexhull.chend.z>maxz) maxz=obj->convexhull.chend.z;
-			o=o->next;
+//			o=o->next;
 		}
 		//o=ObjectsList.first;
 		// ya tengo los limites del octree padre en (minx,miny,minz) (maxx,maxy,maxz)
-
-		Octrees=new PRTOcTree(minx,miny,minz,maxx,maxy,maxz,deep,num,&ObjectsList);
+		
+		Octrees=new PRTOcTree(minx,miny,minz,maxx,maxy,maxz,deep,num,ObjectsList);
 	}
 
 	return true;
@@ -669,7 +675,7 @@ void PRTMain::Reset()
 {
 	if (Octrees)
 		delete Octrees;
-	ObjectsList.Free();
+	ObjectsList.Clear();
 	LightsList.Free();
 		
 	//BRadiosity=false;

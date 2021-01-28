@@ -85,10 +85,8 @@ PRTVector PRTPlane::ComputeColor(PRTVector)
 	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTPlane::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTPlane::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
-
 	/*PRTFloat vd=normal*r.dir;
 	PRTFloat EPSILON=0.000001;
 	if (vd<-EPSILON || (vd>EPSILON && !testcull)) // if testcull and vd>EPSILON then testcull *TODO*
@@ -124,15 +122,15 @@ PRTIntersectPoint PRTPlane::ComputeIntersection(PRTRay r,bool testcull)
 		faux3=faux3/faux1;
 		if (faux3>faux2)
 		{
-			aux.collision=true;
-			aux.distance=faux3;
-			aux.point=r.orig+r.dir*faux3;
-			return aux;
+			result.collision=true;
+			result.distance=faux3;
+			result.point=r.orig+r.dir*faux3;
+			return true;
 		}
 		else
-			return aux;
+			return false;
 	}
 	else
-		return aux;
+		return false;
 }
 

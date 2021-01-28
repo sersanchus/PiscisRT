@@ -244,14 +244,14 @@ PRTVector PRTQuatJulia::ComputeBinormal(PRTVector p)
 	//*TODO*
 }
 
-PRTIntersectPoint PRTQuatJulia::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTQuatJulia::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;		
+	result.distance = PRTINFINITE;
 
 	// RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// NOW INTERSECT WITH THE OBJECT -------------------------------------------------------------------
 
@@ -274,12 +274,12 @@ PRTIntersectPoint PRTQuatJulia::ComputeIntersection(PRTRay r,bool testcull)
 
 	if (col)
 	{	
-		aux.collision=true;
-		aux.distance=(pos-r.orig).Module();
-		aux.point=pos;
+		result.collision=true;
+		result.distance=(pos-r.orig).Module();
+		result.point=pos;
 	}
 	
 	delete dist;
-	return aux;
+	return result.collision;
 }
 

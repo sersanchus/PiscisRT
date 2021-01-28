@@ -105,23 +105,24 @@ PRTVector PRTPolygon::ComputeColor(PRTVector p)
 	return what->ComputeColor(p);
 }
 
-PRTIntersectPoint PRTPolygon::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTPolygon::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
-
+	float distance = PRTINFINITE;
+	
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 	
 	for (unsigned int i=0;i<tris.Lenght();i++)
 	{
 		PRTIntersectPoint aux2;
-		aux2=((PRTTriangle*)(tris.GetAtPos(i)))->ComputeIntersection(r,testcull);
-		if (aux2.collision && aux2.distance<aux.distance)
+		bool collision = ((PRTTriangle*)(tris.GetAtPos(i)))->ComputeIntersection(r,testcull, aux2);
+		if (collision && aux2.distance<distance)
 		{
-			aux=aux2;
+			distance = aux2.distance;
+			result=aux2;
 			what=((PRTTriangle*)(tris.GetAtPos(i)));
 		}
 	}
 	
-	return aux;
+	return distance < PRTINFINITE;
 }

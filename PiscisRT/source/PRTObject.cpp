@@ -52,19 +52,20 @@ PRTObject::PRTObject(PRTVector posaux,int t,PRTMaterial* m)
 
 }*/
 
-PRTIntersectPoint PRTObject::ComputeTransformatedIntersection(PRTRay r,bool doublesided)
+bool PRTObject::ComputeTransformatedIntersection(const PRTRay& r,bool doublesided, PRTIntersectPoint& result)
 {
 	PRTRay ray;
 					
 	ray.orig=invtrans*r.orig;
 	ray.dir=invtransrot*r.dir;//((inv*(r.orig+r.dir))-ray.orig).Normalize();
 		
-	PRTIntersectPoint aux=ComputeIntersection(ray,doublesided);	
-	if (aux.collision)
+	PRTIntersectPoint aux;
+	if (ComputeIntersection(ray,doublesided, result))
 	{
-		aux.point=trans*aux.point;
+		result.point=trans*result.point;
+		return true;
 	}
-	return aux;
+	return false;
 }
 
 void PRTObject::Rotate(PRTVector axis,PRTFloat angle,PRTVector ref)// *TODO* ref

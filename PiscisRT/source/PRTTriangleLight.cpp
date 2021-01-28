@@ -80,54 +80,42 @@ PRTVector PRTTriangleLight::ComputeLightRay(PRTRay &r,PRTIntersectPoint &collisi
 	PRTVector shadow(1,1,1);
 	PRTVector totalshadow(0,0,0);
 	PRTVector lightpos=(ComputeWhatPointLight(collision.point));
-	PRTFloat collisiontolight=(collision.point-lightpos).Module();
 
-
-	if (/*BDoubleSided ||*/ /*(luz->pos!=collision.punto) &&*/ (lightpos-collision.point).Normalize()*normal>=0) // if it is oriented to the light
+	if (/*BDoubleSided ||*/ /*(luz->pos!=collision.punto) &&*/ (lightpos-collision.point)*normal>=0) // if it is oriented to the light
 	{								
 		if (main->BShadows)
 		{
 			for(int i=0;i<main->shadowpass;i++)
 			{
 				lightpos=(ComputeWhatPointLight(collision.point));
-				collisiontolight=(collision.point-lightpos).Module();
+				PRTFloat sqrDistToLight = (collision.point-lightpos).SqrLength();
 				
 				//the is any object between?
 					
-				PRTRay shadowray(lightpos,(((collision.point)-lightpos)).Normalize());
-//				PRTListMember *o2=main->ObjectsList.first;
+				PRTRay shadowray(lightpos,(collision.point-lightpos).Normalize());
 				PRTFloat LAMBDA=PRTFloat(0.000001);
-				bool surethatyes=false;
 
-//				while (!surethatyes && o2!=NULL)
-				for (unsigned int i=0; !surethatyes && i<main->ObjectsList.Length(); i++)
+				for (unsigned int i=0; i<main->ObjectsList.Length(); i++)
 				{
 					PRTObject* obj = main->ObjectsList.GetAtPos(i);
 					PRTIntersectPoint shadowinter;
 					if (object!=obj)
 					{
 						shadowinter=shadowray.Intersect(obj,!main->BDoubleSided,main->BTransformations);
-						//main->numintertest+=shadowray.numrayintertest;
 					
-						PRTFloat disshadow=(shadowinter.point-lightpos).Module();
-						if (shadowinter.collision && disshadow<(collisiontolight-LAMBDA)) //*TODO*
+						PRTFloat sqrdisshadow=(shadowinter.point-lightpos).SqrLength();
+						if (shadowinter.collision && sqrdisshadow<(sqrDistToLight-LAMBDA)) //*TODO*
 						{
-							surethatyes=true;
 							shadow=PRTVector(0,0,0);
+							break;
 						}
 					}
-//					o2=o2->next;
 				}
 				
 				totalshadow+=shadow;
 			}
 			shadow=totalshadow/(main->shadowpass);
 		}
-		/*if (shadow.x>1) shadow.x=1;
-		if (shadow.y>1) shadow.y=1;
-		if (shadow.z>1) shadow.z=1;
-		*/
-
 
 		// LIKE IN RENDER BITCH POLYGONAL LIGHT
 

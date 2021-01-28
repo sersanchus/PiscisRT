@@ -138,14 +138,14 @@ PRTVector PRTSphere::ComputeColor(PRTVector)
 	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTSphere::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTSphere::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
+	result.distance = PRTINFINITE;
 
 	//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	//OBJECT'S INTERSECTION
 	
@@ -221,7 +221,7 @@ PRTIntersectPoint PRTSphere::ComputeIntersection(PRTRay r,bool testcull)
 			-squareradius;
 	faux4=faux2*faux2-4*faux3;
 	if (faux4<faux1) //no colision
-		return aux; 
+		return false;
 	faux4=PRTSqrt(faux4);
 	faux5=((-faux2)-faux4)*PRTFloat(0.5000000000000000);
 	//if (faux5>faux1)
@@ -242,17 +242,17 @@ PRTIntersectPoint PRTSphere::ComputeIntersection(PRTRay r,bool testcull)
 	//testcull
 	if (faux5<faux6 && faux5>faux1 )
 	{
-		aux.collision=true;
-		aux.distance=faux5;
-		aux.point=r.orig+r.dir*faux5;
-		return aux;
+		result.collision=true;
+		result.distance=faux5;
+		result.point=r.orig+r.dir*faux5;
+		return true;
 	}
 	else if (faux6<faux5 && faux6>faux1)
 	{
-		aux.collision=true;
-		aux.distance=faux6;
-		aux.point=r.orig+r.dir*faux6;
-		return aux;
+		result.collision=true;
+		result.distance=faux6;
+		result.point=r.orig+r.dir*faux6;
+		return true;
 	}
 	
 	// we are inside the sphere	
@@ -260,19 +260,19 @@ PRTIntersectPoint PRTSphere::ComputeIntersection(PRTRay r,bool testcull)
 	{
 		if (faux6>faux1)
 		{
-			aux.collision=true;
-			aux.distance=faux6;
-			aux.point=r.orig+r.dir*faux6;
-			return aux;
+			result.collision=true;
+			result.distance=faux6;
+			result.point=r.orig+r.dir*faux6;
+			return true;
 		}
 		else if (faux5>faux1)
 		{
-			aux.collision=true;
-			aux.distance=faux5;
-			aux.point=r.orig+r.dir*faux5;
-			return aux;
+			result.collision=true;
+			result.distance=faux5;
+			result.point=r.orig+r.dir*faux5;
+			return true;
 		}
 	}
-	return aux;
+	return result.distance;
 }
 

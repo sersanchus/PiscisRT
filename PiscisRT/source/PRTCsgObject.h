@@ -133,7 +133,7 @@ public:
 		\param doublesided forced or not
 		\return PRTIntersectPoint the point of intersection if any
 	*/
-	PRTIntersectPoint ComputeIntersection(PRTRay ray,bool doublesided);
+	bool ComputeIntersection(const PRTRay& ray,bool doublesided, PRTIntersectPoint& result);
 
 //--------------------------------------------------------------------------------------
 

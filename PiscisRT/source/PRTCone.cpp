@@ -111,14 +111,12 @@ PRTVector PRTCone::ComputeNormal(PRTVector p)
 	return (vaux2^vaux3).Normalize();
 }
 
-PRTIntersectPoint PRTCone::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTCone::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
-
 	// RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// NOW INTERSECT WITH THE OBJECT -------------------------------------------------------------------
 	
@@ -155,33 +153,34 @@ PRTIntersectPoint PRTCone::ComputeIntersection(PRTRay r,bool testcull)
 
 	vaux1=center+PRTVector(0,0,altitude*PRTFloat(0.5));
 	PRTQuadric auxq(vaux1,radius,radius,altitude,PRT_QUADRIC_CONE,NULL);
-	aux=r.Intersect(&auxq,testcull);
-	if (aux.collision)
+	result=r.Intersect(&auxq,testcull);
+	if (result.collision)
 	{
 		faux1=PRTFloat(0.000001);
-		if (aux.point.z<(vaux1.z-(altitude)-faux1) || aux.point.z>(vaux1.z+faux1))
+		if (result.point.z<(vaux1.z-(altitude)-faux1) || result.point.z>(vaux1.z+faux1))
 		{
-			PRTRay rayaux(aux.point,r.dir);
+			PRTRay rayaux(result.point,r.dir);
 			PRTIntersectPoint aux2=rayaux.Intersect(&auxq,testcull);
 			if (aux2.collision)
 			{
 				if (aux2.point.z<(vaux1.z-(altitude)-faux1) || aux2.point.z>(vaux1.z)+faux1)
 				{
-					aux.collision=false;
-					return aux;
+//					aux.collision=false;
+					return false;
 				}
 				else
 				{
 					//ha habido colision en aux2 con el segundo rayo
-					aux.distance+=aux2.distance;
-					aux.point=aux2.point;
+					result.distance+=aux2.distance;
+					result.point=aux2.point;
 				}
 			}
 			else
-				aux.collision=false;
+				return false;
+//				aux.collision=false;
 		}
 	}
 
-	return aux;
+	return result.collision;
 }
 

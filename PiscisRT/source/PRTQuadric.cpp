@@ -179,10 +179,8 @@ PRTVector PRTQuadric::ComputeColor(PRTVector)
 	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTQuadric::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTQuadric::ComputeIntersection(const PRTRay& r, bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
-
 	//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	//if (!convexhull.IntersectWithRay(r)) // infinite quadrics! no convex hull
@@ -316,7 +314,7 @@ PRTIntersectPoint PRTQuadric::ComputeIntersection(PRTRay r,bool testcull)
 	{
 		faux5=(faux2*faux2)-(4*faux1*faux3);
 		if (faux5<0/*faux4*/)
-			return aux;
+			return false;
 		else
 		{
 			faux5=PRTSqrt(faux5);
@@ -324,7 +322,7 @@ PRTIntersectPoint PRTQuadric::ComputeIntersection(PRTRay r,bool testcull)
 			PRTFloat t0=(-faux2-faux5)/(faux6);
 			PRTFloat t1=(-faux2+faux5)/(faux6);
 			if (t0<0 && t1<0) //no collision
-				return aux;
+				return false;
 			else
 			{
 				if (t0>0 && t1>0) //we are outside the quadric
@@ -367,12 +365,12 @@ PRTIntersectPoint PRTQuadric::ComputeIntersection(PRTRay r,bool testcull)
 
 	if (t>0/*faux4*/)
 	{
-		aux.collision=true;
-		aux.distance=t;
-		aux.point=r.orig+r.dir*t;
-		return aux;
+		result.collision=true;
+		result.distance=t;
+		result.point=r.orig+r.dir*t;
+		return true;
 	}
 
-	return aux;
+	return false;
 }
 

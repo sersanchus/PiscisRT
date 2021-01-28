@@ -99,14 +99,14 @@ PRTVector PRTCylinder::ComputeBinormal(PRTVector p)
 	return PRTVector();//*TODO*
 }
 
-PRTIntersectPoint PRTCylinder::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTCylinder::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;
+//	PRTIntersectPoint aux;
 
 	//RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// AHORA INTERSECCION PROPIA DEL OBJETO -------------------------------------------------------------------
 
@@ -128,20 +128,21 @@ PRTIntersectPoint PRTCylinder::ComputeIntersection(PRTRay r,bool testcull)
 	// ENHANCED
 
 	PRTQuadric auxq(center,radius,radius,0,PRT_QUADRIC_CYLINDER,NULL);
-	aux=r.Intersect(&auxq,testcull);
-	if (aux.collision)
+	result=r.Intersect(&auxq,testcull);
+	if (result.collision)
 	{
 		faux1=PRTFloat(0.000001);
-		if (aux.point.z<(center.z-(altitude*0.5)-faux1) || aux.point.z>(center.z+(altitude*0.5)+faux1))
+		if (result.point.z<(center.z-(altitude*0.5)-faux1) || result.point.z>(center.z+(altitude*0.5)+faux1))
 		{
 			//PRTRay rayaux(aux.punto,dir);
 			//aux=rayaux.Intersect(&auxq,testcull,oct,ch);
 			//if (aux.colision)
 			//	if (aux.punto.z<(c->center.z-(c->altitude/2)-EPSILON) || aux.punto.z>(c->center.z+(c->altitude/2)+EPSILON))
-					aux.collision=false;
+//					aux.collision=false;
+			return false;
 		}
 	}
 
-	return aux;
+	return result.collision;
 }
 

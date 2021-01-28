@@ -35,14 +35,13 @@
 #include "PRTQuartic.h"
 #include "PRTCone.h"
 
-PRTIntersectPoint PRTRay::Intersect(PRTObject *o,bool testcull,bool trans)
+PRTIntersectPoint PRTRay::Intersect(PRTObject *o,bool testcull,bool trans) const
 {
-	//numrayintertest++;
 	PRTIntersectPoint ret;
 	if (trans)
-		ret=o->ComputeTransformatedIntersection(*this,testcull);
+		o->ComputeTransformatedIntersection(*this,testcull, ret);
 	else
-		ret=o->ComputeIntersection(*this,testcull);
+		o->ComputeIntersection(*this,testcull, ret);
 	return ret;
 }
 

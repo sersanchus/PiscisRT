@@ -58,7 +58,7 @@ public:
 		\param v the PRTVector to add
 		\return the PRTVector solution
 	*/
-	inline PRTVector operator+(const PRTVector &v){ return PRTVector(x+v.x,y+v.y,z+v.z); }
+	inline PRTVector operator+(const PRTVector &v) const { return PRTVector(x+v.x,y+v.y,z+v.z); }
 
 //--------------------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ public:
 		\param v the PRTVector to substract
 		\return the PRTVector solution
 	*/
-	inline PRTVector operator-(const PRTVector &v){ return PRTVector(x-v.x,y-v.y,z-v.z); }
+	inline PRTVector operator-(const PRTVector &v) const { return PRTVector(x-v.x,y-v.y,z-v.z); }
 
 //--------------------------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ public:
 	/*!	
 		\return the -PRTVector
 	*/	
-	inline PRTVector operator-(void){ return PRTVector(-x,-y,-z); }
+	inline PRTVector operator-(void) const { return PRTVector(-x,-y,-z); }
 
 //--------------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ public:
 		\param f the PRTFloat to operate
 		\return the PRTVector solution
 	*/
-	inline PRTVector operator*(const PRTFloat f){ return PRTVector(x*f,y*f,z*f); }
+	inline PRTVector operator*(PRTFloat f) const { return PRTVector(x*f,y*f,z*f); }
 	
 //--------------------------------------------------------------------------------------
 
@@ -109,7 +109,9 @@ public:
 		\param v the PRTVector to operate
 		\return the PRTFloat solution
 	*/	
-	inline PRTFloat operator*(const PRTVector &v){ return x*v.x+y*v.y+z*v.z; }
+	inline PRTFloat operator*(const PRTVector &v) const { return x*v.x+y*v.y+z*v.z; }
+	
+	inline PRTFloat Dot(const PRTVector &v) const { return x*v.x + y*v.y + z*v.z; }
 	
 //--------------------------------------------------------------------------------------
 
@@ -118,7 +120,7 @@ public:
 		\param v the PRTVector to operate
 		\return the PRTVector solution
 	*/	
-	inline PRTVector operator^(const PRTVector &v){ return PRTVector(y*v.z-z*v.y,z*v.x-x*v.z,x*v.y-y*v.x); }
+	inline PRTVector operator^(const PRTVector &v) const { return PRTVector(y*v.z-z*v.y,z*v.x-x*v.z,x*v.y-y*v.x); }
 
 //--------------------------------------------------------------------------------------
 
@@ -127,7 +129,7 @@ public:
 		\param f the PRTFloat to operate
 		\return the PRTVector solution
 	*/	
-	inline PRTVector operator/(PRTFloat f){ return (*this)*(1/f); }
+	inline PRTVector operator/(PRTFloat f) const { return (*this)*(1/f); }
 	
 //--------------------------------------------------------------------------------------
 
@@ -225,7 +227,9 @@ public:
 	/*!	
 		\return the Module of the PRTVector
 	*/	
-	inline PRTFloat Module(void){ return PRTSqrt(x*x + y*y + z*z); }
+	inline PRTFloat Module(void) const { return PRTSqrt(x*x + y*y + z*z); }
+	
+	inline PRTFloat SqrLength(void) const { return x*x + y*y + z*z; }
 	
 //--------------------------------------------------------------------------------------
 
@@ -260,7 +264,11 @@ public:
 	/*!	
 		\return the PRTVector solution
 	*/	
-	inline PRTVector Unit(void){ PRTFloat d=(*this)*(*this);return d>0.0?(*this)*PRTSqrt(PRTFloat(1.0)/d):PRTVector(0,0,0); }
+	inline PRTVector Unit(void)
+	{
+		PRTFloat d=(*this)*(*this);
+		return d>0.0?(*this)*PRTSqrt(PRTFloat(1.0)/d):PRTVector(0,0,0);
+	}
 	
 //--------------------------------------------------------------------------------------
 

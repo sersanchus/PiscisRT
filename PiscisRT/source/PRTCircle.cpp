@@ -91,22 +91,23 @@ PRTVector PRTCircle::ComputeBinormal(PRTVector p)
 	return normal;//*TODO*
 }
 
-PRTIntersectPoint PRTCircle::ComputeIntersection(PRTRay r,bool testcull)
+bool PRTCircle::ComputeIntersection(const PRTRay& r,bool testcull, PRTIntersectPoint& result)
 {
-	PRTIntersectPoint aux;		
+//	PRTIntersectPoint aux;
 
 	// RAY'S WITH OBJECT'S CONVEX HULL ----------------------------------------------
 
 	if (!convexhull.IntersectWithRay(r))
-		return aux;
+		return false;
 
 	// NOW INTERSECT WITH THE OBJECT -------------------------------------------------------------------
 
 	PRTPlane auxp(center,normal,repu,repv,NULL);
-	aux=r.Intersect(&auxp,testcull);
-	if (aux.collision==true && ((aux.point-center).Module()>radius))
+	result = r.Intersect(&auxp,testcull);
+	if (result.collision==true && ((result.point-center).Module()>radius))
 	{
-		aux.collision=false;
+//		aux.collision=false;
+		return false;
 	}
-	return aux;
+	return result.collision;
 }

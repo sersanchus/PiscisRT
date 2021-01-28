@@ -63,13 +63,13 @@ void PRTPatches::CalculatePatches(void)
 		}
 	}
 	
-	patches=new PRTObjectPatches[main->ObjectsList.Lenght()/*+main->LightsList.Lenght()*/];
+	patches=new PRTObjectPatches[main->ObjectsList.Length()/*+main->LightsList.Lenght()*/];
 
 	int pos=0;
 
 	int num=5;//tamaño del lightmap y patches
 
-	for (i=0;i<main->ObjectsList.Lenght();i++)
+	for (i=0;i<main->ObjectsList.Length();i++)
 	{
 		
 		PRTObject *o=(PRTObject*)main->ObjectsList.GetAtPos(i);
@@ -90,7 +90,7 @@ void PRTPatches::CalculatePatches(void)
 		{
 			for (int k=0;k<patches[pos].width;k++)
 			{
-				if (main->ObjectsList.Lenght()-i>numlights)
+				if (main->ObjectsList.Length()-i>numlights)
 					patches[pos].p[j*patches[pos].width+k].emmision=PRTVector(0,0,0);
 				else
 					patches[pos].p[j*patches[pos].width+k].emmision=o->material->color;
@@ -552,7 +552,7 @@ void PRTPatches::CalculateLighting(void)
 	{
 		int pos=0;
 
-		for (i=0;i<main->ObjectsList.Lenght();i++)
+		for (i=0;i<main->ObjectsList.Length();i++)
 		{
 			PRTObject *o=(PRTObject*)main->ObjectsList.GetAtPos(i);
 			
@@ -588,7 +588,7 @@ void PRTPatches::CalculateLighting(void)
 
 		pos=0;
 
-		for (i=0;i<main->ObjectsList.Lenght();i++)
+		for (i=0;i<main->ObjectsList.Length();i++)
 		{
 			PRTObject *o=(PRTObject*)main->ObjectsList.GetAtPos(i);
 			
@@ -603,7 +603,7 @@ void PRTPatches::CalculateLighting(void)
 					PRTVector normal=o->ComputeNormal(center);//normal of the patch in 3d
 					PRTVector tangent=o->ComputeTangent(center).Normalize();//tangent vector
 
-					if (main->ObjectsList.Lenght()-i>numlights)
+					if (main->ObjectsList.Length()-i>numlights)
 						patches[pos].p[j*patches[pos].width+k].incident=CalculateIncidentLight(center,normal,tangent);
 					//patches[pos].p[j*patches[pos].width+k].emmision+=patches[pos].p[j*patches[pos].width+k].incident;
 				}
@@ -637,7 +637,7 @@ void PRTPatches::CalculateLighting(void)
 	// calculate excident light - final
 
 	int pos=0;
-	for (i=0;i<main->ObjectsList.Lenght();i++)
+	for (i=0;i<main->ObjectsList.Length();i++)
 	{
 		PRTObject *o=(PRTObject*)main->ObjectsList.GetAtPos(i);
 		

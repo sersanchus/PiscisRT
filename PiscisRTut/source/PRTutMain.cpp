@@ -712,7 +712,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddTriangle(trianauxp1,trianauxp2,trianauxp3,trianauxn1,trianauxn2,trianauxn3,trianauxt1,trianauxt2,trianauxt3,trianauxmaterial);
 			if (inrts) trazador->GetObjectAtPos(pos)->Transform(rts);
 		}
@@ -799,7 +799,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 		}
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddLine(lineauxp1,lineauxp2/*,trianauxn1,trianauxn2,lineauxt1,lineauxt2*/,lineauxmaterial);
 			if (inrts) trazador->GetObjectAtPos(pos)->Transform(rts);
 		}
@@ -833,7 +833,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 		}
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddSphere(sphereauxcentro,sphereauxradio,sphereauxrepu,sphereauxrepv,sphereauxmaterial);
 			if (inrts) trazador->GetObjectAtPos(pos)->Transform(rts);
 		}
@@ -864,7 +864,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 		}
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddQuatJulia(centro,c,iterac,mat);
 			if (inrts) trazador->GetObjectAtPos(pos)->Transform(rts);
 		}
@@ -897,7 +897,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 		}
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddQuartic(quarticauxcentro,quarticauxa,quarticauxb,quarticauxtype,quarticauxmaterial);
 			if (inrts) trazador->GetObjectAtPos(pos)->Transform(rts);
 		}
@@ -931,7 +931,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 		}
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddQuadric(quadricauxcentro,quadricauxa,quadricauxb,quadricauxc,quadricauxtype,quadricauxmaterial);
 			if (inrts) trazador->GetObjectAtPos(pos)->Transform(rts);
 		}
@@ -964,7 +964,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 		}
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddCylinder(cylindercentro,cylinderradio,cylinderaltura,cylinderrepu,cylinderrepv,cylindermaterial);
 			if (inrts)
 			{
@@ -998,7 +998,7 @@ void PRTutMain::startElement(const XML_Char* name, const XML_Char** atts)
 
 		if (!incsg)
 		{
-			int pos=trazador->ObjectsList.Lenght();
+			int pos=trazador->ObjectsList.Length();
 			trazador->AddMesh(fich,pluginmaterial);
 			trazador->GetObjectAtPos(pos)->Transform(rts);
 		}

@@ -24,7 +24,7 @@
 //                                                                           //
 //---------------------------------------------------------------------------//
 
-#include "PRTDinamicList.h"
+#include "PRTArray.h"
 #include "PRTVector.h"
 #include "PRTTriangle.h"
 #include "PRTSphere.h"
@@ -104,7 +104,7 @@ public:
 	void Reset(void);
 	
 	//OBJECTS
-	PRTDinamicList ObjectsList;
+	PRTArray<PRTObject*> ObjectsList;
 	void AddTriangle(PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTMaterial*);
 	void AddTriangle(PRTVector,PRTVector,PRTVector,PRTMaterial*);
 	void AddTriangle(PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTVector,PRTMaterial*);
